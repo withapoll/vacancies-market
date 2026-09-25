@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: dev_local_only
+      POSTGRES_DB: vacancies
+    ports:
+      # 5432 — локальный PostgreSQL, 5433 — контейнер проекта ЦБ
+      - "5434:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # при первом запуске (пустой том) образ выполнит миграции по алфавиту
+      - ./sql/migrations:/docker-entrypoint-initdb.d:ro
+
+volumes:
+  pgdata:
